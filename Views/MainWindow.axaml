@@ -29,7 +29,7 @@
 				</StackPanel>
 			</StackPanel>
 
-		<ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="20 0" VerticalScrollBarVisibility="Auto" Grid.Column="1" IsVisible="{Binding IsFilteredListNotNull}" MinWidth="800" HorizontalAlignment="Right">
+		<ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="20 0" VerticalScrollBarVisibility="Auto" Grid.Column="1" IsVisible="{Binding IsFilteredListNotNull}" MinWidth="600" HorizontalAlignment="Right">
 			<Viewbox HorizontalAlignment="Right" Width="600">
 				<ItemsControl ItemsSource="{Binding FilteredMagazin}">
 					<ItemsControl.ItemTemplate>

@@ -24,7 +24,7 @@
 			<ComboBox ItemsSource="{Binding Creators}" SelectedItem="{Binding SelectedCreator}" DisplayMemberBinding="{Binding FullName}" SelectedValueBinding="{Binding Id}"/>
 
 			<Label Content="Количество: " Margin=" 0 10"/>
-			<NumericUpDown Value="{Binding Count}" Minimum="1" FormatString="0"/>
+			<NumericUpDown Value="{Binding Count}" Minimum="0" FormatString="0"/>
 
 			<Label Content="Цена: " Margin=" 0 10"/>
 			<NumericUpDown Value="{Binding Price}" Minimum="1" FormatString="0.00"/>
