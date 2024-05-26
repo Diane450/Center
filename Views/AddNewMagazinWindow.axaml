@@ -1,0 +1,45 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:Center.ViewModels"
+		mc:Ignorable="d" Width="670" Height="560" MaxHeight="560" MinWidth="670" MinHeight="560"
+        x:Class="Center.AddNewMagazinWindow"
+        x:DataType="vm:AddNewMagazinWindowViewModel"
+        Icon="/Assets/icon.png"
+        Title="Региональный центр охраны труда"
+        WindowStartupLocation="CenterOwner"
+		xmlns:local="clr-namespace:Center.Services">
+
+	<Window.Resources>
+		<local:ImageConverter x:Key="ImageConverter"/>
+	</Window.Resources>
+
+	<StackPanel Orientation="Horizontal">
+		<StackPanel Margin="30 0 0 0">
+			<Label Content="Наименование журнала: " Margin="0 10"/>
+			<TextBox Text="{Binding Magazin.Title}"/>
+
+			<Label Content="Создатель журнала: " Margin="0 10"/>
+			<ComboBox ItemsSource="{Binding Creators}" SelectedItem="{Binding SelectedCreator}" DisplayMemberBinding="{Binding FullName}" SelectedValueBinding="{Binding Id}"/>
+
+			<Label Content="Количество: " Margin=" 0 10"/>
+			<NumericUpDown Value="{Binding Count}" Minimum="1" FormatString="0"/>
+
+			<Label Content="Цена: " Margin=" 0 10"/>
+			<NumericUpDown Value="{Binding Price}" Minimum="1" FormatString="0"/>
+			
+			<Button Content="Добавить фото журнала" Click="ChangePhoto" Margin="0 10" />
+			<StackPanel Orientation="Horizontal">
+				<Button Content="Добавить журнал" Command="{Binding Add}" IsEnabled="{Binding IsButtonEnable}"/>
+				<Image Source="/Assets/info.png" Height="20" HorizontalAlignment="Left" Margin="10 0 0 0">
+					<ToolTip.Tip>
+						<TextBlock FontSize="14" Text="Добавить новый журнал возможно после заполнения всех полей, включая фото"/>
+					</ToolTip.Tip>
+				</Image>
+			</StackPanel>
+			<TextBlock Text="{Binding Message}" Margin="0 10" Foreground="White"/>
+		</StackPanel>
+		<Image Source="{Binding Magazin.Photo, Converter={StaticResource ImageConverter}}" Margin="30 30 30 0" MaxHeight="400" MaxWidth="300" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+	</StackPanel>
+</Window>

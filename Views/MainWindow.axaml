@@ -1,0 +1,55 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:Center.ViewModels"
+		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Center.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/icon.png"
+        Title="Региональный центр охраны труда"
+        WindowStartupLocation="CenterOwner"
+		xmlns:local="clr-namespace:Center.Services">
+
+	<Window.Resources>
+		<local:ImageConverter x:Key="ImageConverter"/>
+	</Window.Resources>
+
+	<Grid ColumnDefinitions="*, *">
+		<!--<Viewbox Grid.Column="0" MinWidth="200" MaxWidth="400" VerticalAlignment="Top" HorizontalAlignment="Left">-->
+			<StackPanel Margin="5" Grid.Column="0">
+				<TextBlock Text="Поиск" />
+				<TextBox Width="150" TextWrapping="Wrap" HorizontalAlignment="Left" Text="{Binding SearchingMagazin}" MaxWidth="200"/>
+				<TextBlock Text="Сортировка" />
+				<ComboBox ItemsSource="{Binding SortValues}" SelectedItem="{Binding SelectedSortValue}"/>
+				<TextBlock Text="Фильтрация по создателям" />
+				<ComboBox ItemsSource="{Binding Creators}" SelectedItem="{Binding SelectedCreator}" SelectedValueBinding="{Binding Id}" DisplayMemberBinding="{Binding FullName}"/>
+				<TextBlock Text="{Binding Message}" Margin="0 5"/>
+				<Button Content="Добавить" VerticalAlignment="Bottom" Click="Add" IsVisible="{Binding IsAdmin}"/>
+			</StackPanel>
+
+		<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Column="1" IsVisible="{Binding IsFilteredListNotNull}" MinWidth="800" HorizontalAlignment="Right">
+			<Viewbox HorizontalAlignment="Right" Width="600">
+				<ItemsControl ItemsSource="{Binding FilteredMagazin}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Grid Margin="5" RowDefinitions="*, *, *, *, *, *, *" Background="#3E6680">
+								<Image Source="{Binding Photo, Converter={StaticResource ImageConverter}}" Grid.Row="0" MaxHeight="300" MaxWidth="300" Margin="10"/>
+								<TextBlock Text="{Binding Title}" Margin="5" Grid.Row="1" Foreground="White"/>
+								<TextBlock Text="{Binding Price}" Margin="5" Grid.Row="2" Foreground="White"/>
+								<TextBlock Text="{Binding CreationDate}" Margin="5" Grid.Row="3" Foreground="White"/>
+								<TextBlock Text="{Binding Creator.FullName}" Margin="5" Grid.Row="4" Foreground="White"/>
+								<TextBlock Text="{Binding Count}" Margin="5" Grid.Row="5" Foreground="White"/>
+								<StackPanel Orientation="Horizontal" Grid.Row="6">
+									<!--<Button Content="Редактировать" Click="Edit" IsVisible="{Binding IsButtonVisible}" />
+									<Button Content="Удалить" Click="Delete" IsVisible="{Binding IsButtonVisible}" />-->
+								</StackPanel>
+							</Grid>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</Viewbox>
+		</ScrollViewer>
+		<!--<TextBlock Text="Нет результатов поиска" Grid.Column="1" IsVisible="{Binding IsFilteredGoodsNull}" FontWeight="Black" VerticalAlignment="Center" HorizontalAlignment="Center"/>-->
+	</Grid>
+</Window>
