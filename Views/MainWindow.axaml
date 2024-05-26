@@ -36,12 +36,26 @@
 							<Grid Margin="5" RowDefinitions="*, *, *, *, *, *, *" Background="#3E6680">
 								<Image Source="{Binding Photo, Converter={StaticResource ImageConverter}}" Grid.Row="0" MaxHeight="300" MaxWidth="300" Margin="10"/>
 								<TextBlock Text="{Binding Title}" Margin="5" Grid.Row="1" Foreground="White"/>
-								<TextBlock Text="{Binding Price}" Margin="5" Grid.Row="2" Foreground="White"/>
-								<TextBlock Text="{Binding CreationDate}" Margin="5" Grid.Row="3" Foreground="White"/>
-								<TextBlock Text="{Binding Creator.FullName}" Margin="5" Grid.Row="4" Foreground="White"/>
-								<TextBlock Text="{Binding Count}" Margin="5" Grid.Row="5" Foreground="White"/>
+								<StackPanel Grid.Row="2" Orientation="Horizontal">
+									<TextBlock Text="Цена:" Margin="5" Foreground="White"/>
+									<TextBlock Text="{Binding Price}" Margin="5" Foreground="White"/>
+									<TextBlock Text="₽" Margin="0 5" Foreground="White"/>
+								</StackPanel>
+								<StackPanel Grid.Row="3" Orientation="Horizontal">
+									<TextBlock Text="Дата создания:" Margin="5" Foreground="White"/>
+									<TextBlock Text="{Binding CreationDate}" Margin="5"  Foreground="White"/>
+								</StackPanel>
+								<StackPanel Grid.Row="4" Orientation="Horizontal">
+									<TextBlock Text="Автор:" Margin="5" Foreground="White"/>
+									<TextBlock Text="{Binding Creator.FullName}" Margin="5"  Foreground="White"/>
+								</StackPanel>
+								<StackPanel Grid.Row="5" Orientation="Horizontal">
+									<TextBlock Text="Количество:" Margin="5" Foreground="White"/>
+									<TextBlock Text="{Binding Count}" Margin="5" Foreground="White"/>
+								</StackPanel>
+								
 								<StackPanel Orientation="Horizontal" Grid.Row="6">
-									<!--<Button Content="Редактировать" Click="Edit" IsVisible="{Binding IsButtonVisible}" />-->
+									<Button Content="Редактировать" Click="Edit" Margin="0 0 10 0"/>
 									<Button Content="Удалить" IsVisible="{Binding IsAdmin}" Click="Delete"  />
 								</StackPanel>
 							</Grid>

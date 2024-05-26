@@ -10,14 +10,16 @@ using System.Threading.Tasks;
 
 namespace Center.ViewModels
 {
-    public class AddNewMagazinWindowViewModel : ViewModelBase
+    public class EditWindowViewModel : ViewModelBase
     {
+        public MagazinDTO CurrentMagazin { get; set; }
+
         private MagazinDTO _magazin = null!;
 
         public MagazinDTO Magazin
         {
             get { return _magazin; }
-            set { _magazin = this.RaiseAndSetIfChanged(ref _magazin, value); }
+            set { _magazin = value; }
         }
 
         private decimal? _price;
@@ -41,7 +43,7 @@ namespace Center.ViewModels
         public string Message
         {
             get { return _message; }
-            set { _message = this.RaiseAndSetIfChanged(ref _message, value);; }
+            set { _message = this.RaiseAndSetIfChanged(ref _message, value); ; }
         }
 
         public List<Worker> Creators { get; set; } = null!;
@@ -60,22 +62,33 @@ namespace Center.ViewModels
             get { return _isButtonEnable; }
             set { _isButtonEnable = this.RaiseAndSetIfChanged(ref _isButtonEnable, value); }
         }
-
-        public MainWindowViewModel Model { get; set; }
-
-        public AddNewMagazinWindowViewModel(MainWindowViewModel model)
+        public EditWindowViewModel(MagazinDTO magazinDTO)
         {
-            Model = model;
-            Magazin = new MagazinDTO();
+            CurrentMagazin = magazinDTO;
+
+            Magazin = new MagazinDTO
+            {
+                Id = magazinDTO.Id,
+                Title = magazinDTO.Title,
+                CreationDate = magazinDTO.CreationDate,
+                Price = magazinDTO.Price,
+                Count = magazinDTO.Count,
+                Photo = magazinDTO.Photo,
+                Creator = magazinDTO.Creator
+            };
+
+            Count = magazinDTO.Count;
+            Price = magazinDTO.Price;
 
             Creators = DBCall.GetCreators();
-            SelectedCreator = Creators[0];
+
+            SelectedCreator = Creators.First(m => m.Id == Magazin.Creator.Id);
 
             this.WhenAnyValue(
                x => x.Magazin.Title,
                x => x.Magazin.Photo,
                x => x.Count,
-               x=>x.Price).Subscribe(_ => IsButtonEnabled());
+               x => x.Price).Subscribe(_ => IsButtonEnabled());
         }
 
         private void IsButtonEnabled()
@@ -83,22 +96,31 @@ namespace Center.ViewModels
             IsButtonEnable = !string.IsNullOrEmpty(Magazin.Title) && Magazin.Photo != null && Count != null && Price != null;
         }
 
-        public void Add()
+        public void Edit()
         {
             try
             {
                 Magazin.Price = (decimal)Price!;
-                Magazin.CreationDate = DateOnly.FromDateTime(DateTime.Now);
                 Magazin.Count = (int)Count!;
                 Magazin.Creator = SelectedCreator;
-                DBCall.Add(Magazin);
-                Model.Magazins.Add(Magazin);
-                Model.Filter();
-                Message = "Добавлено успешно";
+                DBCall.Edit(Magazin);
+
+                if (CurrentMagazin.Count > Magazin.Count)
+                    DBCall.IssueMagazin(Magazin.Id, CurrentUser.Worker.Id, CurrentMagazin.Count - Magazin.Count);
+                else if (CurrentMagazin.Count < Magazin.Count)
+                    DBCall.ReceiveMagazin(Magazin.Id, CurrentUser.Worker.Id, Magazin.Count - CurrentMagazin.Count);
+
+                CurrentMagazin.Title = Magazin.Title;
+                CurrentMagazin.Photo = Magazin.Photo;
+                CurrentMagazin.Price = Magazin.Price;
+                CurrentMagazin.Creator = Magazin.Creator;
+                CurrentMagazin.Count = Magazin.Count;
+
+                Message = "Данные обновлены";
             }
             catch (Exception)
             {
-                Message = "Не удалось добавить журнал";
+                Message = "Не удалось применить изменения";
             }
         }
     }

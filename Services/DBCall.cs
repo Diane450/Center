@@ -65,5 +65,51 @@ namespace Center.Services
             _dbContext.Magazins.Remove(drug);
             _dbContext.SaveChanges();
         }
+
+        public static void Edit(MagazinDTO magazinDto)
+        {
+            var magazin = _dbContext.Magazins.First(d => d.Id == magazinDto.Id);
+
+            magazin.Title = magazinDto.Title;
+            magazin.Creator = magazinDto.Creator;
+            magazin.Photo = magazinDto.Photo;
+            magazin.Price = magazinDto.Price;
+
+            _dbContext.SaveChanges();
+        }
+
+        public static void IssueMagazin(int magazinId, int workerId, int count)
+        {
+            var magazin = _dbContext.Magazins.First(d => d.Id == magazinId);
+            magazin.Count -= count;
+            _dbContext.SaveChanges();
+
+            var dispensingDrug = new IssuingMagazine
+            {
+                MagazinId = magazinId,
+                WorkerId = workerId,
+                Date = DateOnly.FromDateTime(DateTime.Now),
+                Count = count
+            };
+            _dbContext.IssuingMagazines.Add(dispensingDrug);
+            _dbContext.SaveChanges(); 
+        }
+
+        public static void ReceiveMagazin(int magazinId, int workerId, int count)
+        {
+            var magazin = _dbContext.Magazins.First(d => d.Id == magazinId);
+            magazin.Count += count;
+            _dbContext.SaveChanges();
+
+            var receiveDrug = new ReceivingMagazine
+            {
+                MagazinId = magazinId,
+                WorkerId = workerId,
+                Date = DateOnly.FromDateTime(DateTime.Now),
+                Count = count
+            };
+            _dbContext.ReceivingMagazines.Add(receiveDrug);
+            _dbContext.SaveChanges();
+        }
     }
 }

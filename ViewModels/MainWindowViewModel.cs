@@ -65,7 +65,7 @@ namespace Center.ViewModels
 
         public bool IsAdmin { get; set; }
 
-        private string _message;
+        private string _message = null!;
 
         public string Message
         {
@@ -73,7 +73,7 @@ namespace Center.ViewModels
             set { _message = this.RaiseAndSetIfChanged(ref _message, value); }
         }
 
-        private string _searchingMagazin;
+        private string _searchingMagazin = null!;
 
         public string SearchingMagazin
         {

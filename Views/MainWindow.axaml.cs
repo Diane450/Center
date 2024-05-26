@@ -18,7 +18,7 @@ public partial class MainWindow : Window
     private void Add(object sender, RoutedEventArgs e)
     {
         var button = (Button)sender;
-        var dataContext = (MainWindowViewModel)button.DataContext;
+        var dataContext = (MainWindowViewModel)button.DataContext!;
 
         var window = new AddNewMagazinWindow(dataContext);
         window.ShowDialog(this);
@@ -27,12 +27,19 @@ public partial class MainWindow : Window
     private void Delete(object sender, RoutedEventArgs e)
     {
         var button = (Button)sender;
-        var DataContext = (MainWindowViewModel)this.DataContext;
-        var magazin = (MagazinDTO)button.DataContext;
+        var DataContext = (MainWindowViewModel)this.DataContext!;
+        var magazin = (MagazinDTO)button.DataContext!;
 
         var window = new DeleteWindow(DataContext, magazin);
         window.ShowDialog(this);
     }
 
+    private void Edit(object sender, RoutedEventArgs e)
+    {
+        var button = (Button)sender;
+        var dataContext = (MagazinDTO)button.DataContext!;
+        var editWindow = new EditWindow(dataContext);
+        editWindow.ShowDialog(this);
+    }
 
 }
