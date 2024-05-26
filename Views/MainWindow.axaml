@@ -3,7 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:Center.ViewModels"
-		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		mc:Ignorable="d" Width="1140" Height="560" MinHeight="560" MinWidth="1140"
         x:Class="Center.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/icon.png"
@@ -17,45 +17,47 @@
 
 	<Grid ColumnDefinitions="*, *">
 			<StackPanel Margin="20" Grid.Column="0">
-				<TextBlock Text="Поиск" FontSize="24" Margin="0 10"/>
+				<TextBlock Text="Поиск" FontSize="24" Margin="0 10 0 10"/>
 				<TextBox Width="300" FontSize="24" HorizontalAlignment="Left" Text="{Binding SearchingMagazin}" MaxWidth="500"/>
-				<TextBlock Text="Сортировка" FontSize="24" Margin="0 10"/>
+				<TextBlock Text="Сортировка" FontSize="24" Margin="0 20 0 10"/>
 				<ComboBox ItemsSource="{Binding SortValues}" Padding="20 10" SelectedItem="{Binding SelectedSortValue}" FontSize="24"/>
-				<TextBlock Text="Фильтрация по создателям" FontSize="24" Margin="0 10"/>
+				<TextBlock Text="Фильтрация по создателям" FontSize="24" Margin="0 20 0 10"/>
 				<ComboBox ItemsSource="{Binding Creators}" Padding="20 10" SelectedItem="{Binding SelectedCreator}" FontSize="24" SelectedValueBinding="{Binding Id}" DisplayMemberBinding="{Binding FullName}"/>
-				<Button Content="Добавить новый журнал" VerticalAlignment="Bottom" Click="Add" IsVisible="{Binding IsAdmin}" FontSize="24" Margin="0 10"/>
-				<Button Content="Создать отчет" Click="OpenReportWindow" VerticalAlignment="Bottom" FontSize="24" Margin="0 10"/>
+				<StackPanel Orientation="Horizontal" Margin="0 20">
+					<Button Content="Добавить новый журнал" VerticalAlignment="Bottom" Click="Add" IsVisible="{Binding IsAdmin}" FontSize="24" Padding="10"/>
+					<Button Content="Создать отчет" Click="OpenReportWindow" VerticalAlignment="Bottom" FontSize="24" Margin="10 0" Padding="10"/>
+				</StackPanel>
 			</StackPanel>
 
-		<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Column="1" IsVisible="{Binding IsFilteredListNotNull}" MinWidth="800" HorizontalAlignment="Right">
+		<ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="20 0" VerticalScrollBarVisibility="Auto" Grid.Column="1" IsVisible="{Binding IsFilteredListNotNull}" MinWidth="800" HorizontalAlignment="Right">
 			<Viewbox HorizontalAlignment="Right" Width="600">
 				<ItemsControl ItemsSource="{Binding FilteredMagazin}">
 					<ItemsControl.ItemTemplate>
 						<DataTemplate>
 							<Grid Margin="5" RowDefinitions="*, *, *, *, *, *, *" Background="#3E6680">
-								<Image Source="{Binding Photo, Converter={StaticResource ImageConverter}}" Grid.Row="0" MaxHeight="300" MaxWidth="300" Margin="10"/>
-								<TextBlock Text="{Binding Title}" Margin="5" Grid.Row="1" Foreground="White"/>
-								<StackPanel Grid.Row="2" Orientation="Horizontal">
-									<TextBlock Text="Цена:" Margin="5" Foreground="White"/>
-									<TextBlock Text="{Binding Price}" Margin="5" Foreground="White"/>
-									<TextBlock Text="₽" Margin="0 5" Foreground="White"/>
+								<Image Source="{Binding Photo, Converter={StaticResource ImageConverter}}" Grid.Row="0" MaxHeight="600" MaxWidth="600" Margin="10"/>
+								<TextBlock Text="{Binding Title}" Margin="10" Grid.Row="1" Foreground="White" FontSize="24"/>
+								<StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10">
+									<TextBlock Text="Цена:" Margin="5" Foreground="White" FontSize="24"/>
+									<TextBlock Text="{Binding Price}" Margin="0 5" Foreground="White" FontSize="24"/>
+									<TextBlock Text="₽" Margin="0 5" Foreground="White" FontSize="24"/>
 								</StackPanel>
-								<StackPanel Grid.Row="3" Orientation="Horizontal">
-									<TextBlock Text="Дата создания:" Margin="5" Foreground="White"/>
-									<TextBlock Text="{Binding CreationDate}" Margin="5"  Foreground="White"/>
+								<StackPanel Grid.Row="3" Orientation="Horizontal" Margin="10">
+									<TextBlock Text="Дата создания:" Foreground="White" FontSize="24"/>
+									<TextBlock Text="{Binding CreationDate}" Margin="5 0"  Foreground="White" FontSize="24"/>
 								</StackPanel>
-								<StackPanel Grid.Row="4" Orientation="Horizontal">
-									<TextBlock Text="Автор:" Margin="5" Foreground="White"/>
-									<TextBlock Text="{Binding Creator.FullName}" Margin="5"  Foreground="White"/>
+								<StackPanel Grid.Row="4" Orientation="Horizontal" Margin="10">
+									<TextBlock Text="Автор:" Foreground="White" FontSize="24"/>
+									<TextBlock Text="{Binding Creator.FullName}" Margin="5 0"  Foreground="White" FontSize="24"/>
 								</StackPanel>
-								<StackPanel Grid.Row="5" Orientation="Horizontal">
-									<TextBlock Text="Количество:" Margin="5" Foreground="White"/>
-									<TextBlock Text="{Binding Count}" Margin="5" Foreground="White"/>
+								<StackPanel Grid.Row="5" Orientation="Horizontal" Margin="10">
+									<TextBlock Text="Количество:" Foreground="White" FontSize="24"/>
+									<TextBlock Text="{Binding Count}" Margin="5 0" Foreground="White" FontSize="24"/>
 								</StackPanel>
 								
 								<StackPanel Orientation="Horizontal" Grid.Row="6">
-									<Button Content="Редактировать" Click="Edit" Margin="0 0 10 0"/>
-									<Button Content="Удалить" IsVisible="{Binding IsAdmin}" Click="Delete"  />
+									<Button Content="Редактировать" Click="Edit" Margin="10" FontSize="24"/>
+									<Button Content="Удалить" IsVisible="{Binding IsAdmin}" Click="Delete" FontSize="24" />
 								</StackPanel>
 							</Grid>
 						</DataTemplate>

@@ -27,11 +27,11 @@
 			<NumericUpDown Value="{Binding Count}" Minimum="1" FormatString="0"/>
 
 			<Label Content="Цена: " Margin=" 0 10"/>
-			<NumericUpDown Value="{Binding Price}" Minimum="1" FormatString="0"/>
+			<NumericUpDown Value="{Binding Price}" Minimum="1" FormatString="0.00"/>
 
 			<Button Content="Добавить фото журнала" Click="ChangePhoto" Margin="0 10" />
 			<StackPanel Orientation="Horizontal">
-				<Button Content="Добавить журнал" Command="{Binding Edit}" IsEnabled="{Binding IsButtonEnable}"/>
+				<Button Content="Применить изменения" Command="{Binding Edit}" IsEnabled="{Binding IsButtonEnable}"/>
 				<Image Source="/Assets/info.png" Height="20" HorizontalAlignment="Left" Margin="10 0 0 0">
 					<ToolTip.Tip>
 						<TextBlock FontSize="14" Text="Изменить возможно после заполнения всех полей, включая фото"/>
