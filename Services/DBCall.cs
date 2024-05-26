@@ -44,7 +44,7 @@ namespace Center.Services
             return _dbContext.Workers.ToList();
         }
 
-        public static void Add(MagazinDTO magazinDTO)
+        public static int Add(MagazinDTO magazinDTO)
         {
             var magazin = new Magazin
             {
@@ -57,6 +57,7 @@ namespace Center.Services
             };
             _dbContext.Magazins.Add(magazin);
             _dbContext.SaveChanges();
+            return magazin.Id;
         }
 
         public static void DeleteMagazin(MagazinDTO MagazinDTO)

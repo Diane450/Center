@@ -24,8 +24,8 @@
 				<TextBlock Text="Фильтрация по создателям" FontSize="24" Margin="0 20 0 10"/>
 				<ComboBox ItemsSource="{Binding Creators}" Padding="20 10" SelectedItem="{Binding SelectedCreator}" FontSize="24" SelectedValueBinding="{Binding Id}" DisplayMemberBinding="{Binding FullName}"/>
 				<StackPanel Orientation="Horizontal" Margin="0 20">
-					<Button Content="Добавить новый журнал" VerticalAlignment="Bottom" Click="Add" IsVisible="{Binding IsAdmin}" FontSize="24" Padding="10"/>
-					<Button Content="Создать отчет" Click="OpenReportWindow" VerticalAlignment="Bottom" FontSize="24" Margin="10 0" Padding="10"/>
+					<Button Content="Добавить новый журнал" VerticalAlignment="Bottom" Click="Add" IsVisible="{Binding IsAdmin}" FontSize="24" Margin=" 0 0 10 0" Padding="10"/>
+					<Button Content="Создать отчет" Click="OpenReportWindow" VerticalAlignment="Bottom" FontSize="24" Margin=" 0 0 10 0" Padding="10"/>
 				</StackPanel>
 			</StackPanel>
 

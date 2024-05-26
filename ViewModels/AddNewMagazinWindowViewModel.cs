@@ -91,7 +91,7 @@ namespace Center.ViewModels
                 Magazin.CreationDate = DateOnly.FromDateTime(DateTime.Now);
                 Magazin.Count = (int)Count!;
                 Magazin.Creator = SelectedCreator;
-                DBCall.Add(Magazin);
+                Magazin.Id = DBCall.Add(Magazin);
                 Model.Magazins.Add(Magazin);
                 Model.Filter();
                 Message = "Добавлено успешно";

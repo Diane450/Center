@@ -92,6 +92,8 @@ namespace Center.ViewModels
                 "от Я до А",
                 "количество: от меньшего к большему",
                 "количество: от большего к меньшему",
+                "дата: от раннего к позднему",
+                "дата: от позднего к раннему",
             };
             SelectedSortValue = SortValues[0];
 
@@ -146,9 +148,17 @@ namespace Center.ViewModels
             {
                 FilteredMagazin = new ObservableCollection<MagazinDTO>(FilteredMagazin.OrderBy(d => d.Count).ToList());
             }
-            else
+            else if (SelectedSortValue == SortValues[3])
             {
                 FilteredMagazin = new ObservableCollection<MagazinDTO>(FilteredMagazin.OrderByDescending(d => d.Count).ToList());
+            }
+            else if (SelectedSortValue == SortValues[4])
+            {
+                FilteredMagazin = new ObservableCollection<MagazinDTO>(FilteredMagazin.OrderBy(d => d.CreationDate).ToList());
+            }
+            else
+            {
+                FilteredMagazin = new ObservableCollection<MagazinDTO>(FilteredMagazin.OrderByDescending(d => d.CreationDate).ToList());
             }
             SelectedMagazin = FilteredMagazin[0];
         }
