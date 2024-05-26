@@ -41,8 +41,8 @@
 								<TextBlock Text="{Binding Creator.FullName}" Margin="5" Grid.Row="4" Foreground="White"/>
 								<TextBlock Text="{Binding Count}" Margin="5" Grid.Row="5" Foreground="White"/>
 								<StackPanel Orientation="Horizontal" Grid.Row="6">
-									<!--<Button Content="Редактировать" Click="Edit" IsVisible="{Binding IsButtonVisible}" />
-									<Button Content="Удалить" Click="Delete" IsVisible="{Binding IsButtonVisible}" />-->
+									<!--<Button Content="Редактировать" Click="Edit" IsVisible="{Binding IsButtonVisible}" />-->
+									<Button Content="Удалить" IsVisible="{Binding IsAdmin}" Click="Delete"  />
 								</StackPanel>
 							</Grid>
 						</DataTemplate>

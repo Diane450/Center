@@ -87,5 +87,6 @@ namespace Center.ModelsDTO
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Price)));
             }
         }
+        public static bool IsAdmin { get; set; }
     }
 }

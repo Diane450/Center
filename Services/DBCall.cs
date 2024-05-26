@@ -56,6 +56,13 @@ namespace Center.Services
                 Price = magazinDTO.Price,
             };
             _dbContext.Magazins.Add(magazin);
+            _dbContext.SaveChanges(); 
+        }
+
+        public static void DeleteMagazin(MagazinDTO MagazinDTO)
+        {
+            var drug = _dbContext.Magazins.First(d => d.Id == MagazinDTO.Id);
+            _dbContext.Magazins.Remove(drug);
             _dbContext.SaveChanges();
         }
     }

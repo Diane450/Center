@@ -85,7 +85,7 @@ namespace Center.ViewModels
         {
             Magazins = DBCall.GetMagazines();
             FilteredMagazin = new ObservableCollection<MagazinDTO>(Magazins);
-            
+            MagazinDTO.IsAdmin = CurrentUser.Worker.User.RoleId == 1;
             SortValues = new List<string>
             {
                 "от А до Я",
@@ -152,7 +152,6 @@ namespace Center.ViewModels
             }
             SelectedMagazin = FilteredMagazin[0];
         }
-
 
         public void Filter()
         {

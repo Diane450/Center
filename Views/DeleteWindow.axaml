@@ -1,0 +1,21 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:Center.ViewModels"
+		mc:Ignorable="d" Width="490" Height="180" MaxHeight="180" MaxWidth="490" MinHeight="180" MinWidth="490"
+        x:Class="Center.Views.DeleteWindow"
+        x:DataType="vm:DeleteWindowViewModel"
+        Icon="/Assets/icon.png"
+        Title="Региональный центр охраны труда"
+        WindowStartupLocation="CenterOwner">
+
+	<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+		<TextBlock Text="Вы уверены, что хотите удалить данный журнал?"/>
+		<StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" >
+			<Button Content="Отмена" Margin="10" Click="Close"/>
+			<Button Content="Удалить" Margin="10" Command="{Binding Delete}" IsEnabled="{Binding IsButtonEnable}"/>
+		</StackPanel>
+		<TextBlock Text="{Binding Message}" Foreground="White" />
+	</StackPanel>
+</Window>
