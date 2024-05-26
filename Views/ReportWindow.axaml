@@ -1,0 +1,30 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:Center.ViewModels"
+		mc:Ignorable="d" Width="270" Height="300" MaxHeight="300" MaxWidth="270" MinHeight="300" MinWidth="270"
+        x:Class="Center.ReportWindow"
+        x:DataType="vm:ReportWindowViewModel"
+        Icon="/Assets/icon.png"
+        Title="Региональный центр охраны труда"
+        WindowStartupLocation="CenterOwner">
+
+	<Window.Styles>
+		<StyleInclude Source="/Styles/MainWindowStyles.axaml"/>
+	</Window.Styles>
+
+	<StackPanel Orientation="Vertical" Margin="10">
+
+		<TextBlock Text="Начало периода: "/>
+		<CalendarDatePicker DisplayDateEnd="{Binding Today}" Margin="10" Watermark=" " Height="20" Width="175" SelectedDate="{Binding SelectedDateStart}"/>
+		<TextBlock Text="Конец периода: "/>
+		<CalendarDatePicker DisplayDateEnd="{Binding Today}" Margin="10" Watermark=" " Height="20" Width="175" SelectedDate="{Binding SelectedDateEnd}"/>
+
+		<StackPanel Orientation="Horizontal" Margin="10">
+			<Button Content="Создать отчет" Command="{Binding CreateReport}"/>
+		</StackPanel>
+
+		<TextBlock Text="{Binding Message}" Foreground="White"/>
+	</StackPanel>
+</Window>

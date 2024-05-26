@@ -56,7 +56,7 @@ namespace Center.Services
                 Price = magazinDTO.Price,
             };
             _dbContext.Magazins.Add(magazin);
-            _dbContext.SaveChanges(); 
+            _dbContext.SaveChanges();
         }
 
         public static void DeleteMagazin(MagazinDTO MagazinDTO)
@@ -89,10 +89,11 @@ namespace Center.Services
                 MagazinId = magazinId,
                 WorkerId = workerId,
                 Date = DateOnly.FromDateTime(DateTime.Now),
-                Count = count
+                Count = count,
+                TotalSum = count * magazin.Price
             };
             _dbContext.IssuingMagazines.Add(dispensingDrug);
-            _dbContext.SaveChanges(); 
+            _dbContext.SaveChanges();
         }
 
         public static void ReceiveMagazin(int magazinId, int workerId, int count)
@@ -110,6 +111,39 @@ namespace Center.Services
             };
             _dbContext.ReceivingMagazines.Add(receiveDrug);
             _dbContext.SaveChanges();
+        }
+
+        public static List<IssuingMagazine> GetIssuingMagazinData(DateOnly[] DateRange)
+        {
+            var dispensingDrugsQuantities = _dbContext.IssuingMagazines
+            .Where(d => d.Date >= DateRange[0] && d.Date <= DateRange[1])
+            .Include(d => d.Magazin)
+            .GroupBy(di => di.MagazinId)
+            .Select(g => new IssuingMagazine()
+            {
+                Magazin = g.First().Magazin,
+                MagazinId = g.Key,
+                Count = g.Sum(di => di.Count),
+                TotalSum = g.Sum(di=>di.TotalSum)
+            })
+            .ToList();
+            return dispensingDrugsQuantities;
+        }
+
+        public static List<ReceivingMagazine> GetReceivingMagazinData(DateOnly[] DateRange)
+        {
+            var receivingDrugsQuantities = _dbContext.ReceivingMagazines
+            .Where(d => d.Date >= DateRange[0] && d.Date <= DateRange[1])
+            .Include(d => d.Magazin)
+            .GroupBy(di => di.MagazinId)
+            .Select(g => new ReceivingMagazine()
+            {
+                Magazin = g.First().Magazin,
+                MagazinId = g.Key,
+                Count = g.Sum(di => di.Count)
+            })
+            .ToList();
+            return receivingDrugsQuantities;
         }
     }
 }

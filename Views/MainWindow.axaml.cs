@@ -42,4 +42,10 @@ public partial class MainWindow : Window
         editWindow.ShowDialog(this);
     }
 
+    private void OpenReportWindow(object sender, RoutedEventArgs e)
+    {
+        var window = new ReportWindow();
+        window.ShowDialog(this);
+    }
+
 }

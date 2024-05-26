@@ -15,6 +15,8 @@ public partial class IssuingMagazine
 
     public int Count { get; set; }
 
+    public decimal TotalSum { get; set; }
+
     public virtual Magazin Magazin { get; set; } = null!;
 
     public virtual Worker Worker { get; set; } = null!;

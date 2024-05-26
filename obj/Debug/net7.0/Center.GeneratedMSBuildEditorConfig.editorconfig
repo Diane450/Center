@@ -18,6 +18,9 @@ build_property.ProjectDir = C:\Users\Home\Desktop\vsProjects\Center\
 [C:/Users/Home/Desktop/vsProjects/Center/App.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[C:/Users/Home/Desktop/vsProjects/Center/Styles/MainWindowStyles.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [C:/Users/Home/Desktop/vsProjects/Center/Views/AddNewMagazinWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
@@ -31,4 +34,7 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
 [C:/Users/Home/Desktop/vsProjects/Center/Views/MainWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Users/Home/Desktop/vsProjects/Center/Views/ReportWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml

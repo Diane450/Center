@@ -58,6 +58,8 @@ public partial class Ispr2336AvetisyanSkCenterContext : DbContext
 
             entity.HasIndex(e => e.WorkerId, "FK_IssuingMagazines_WorkerId_idx");
 
+            entity.Property(e => e.TotalSum).HasPrecision(10, 2);
+
             entity.HasOne(d => d.Magazin).WithMany(p => p.IssuingMagazines)
                 .HasForeignKey(d => d.MagazinId)
                 .HasConstraintName("FK_IssuingMagazines_MagazinId");

@@ -153,3 +153,5 @@ C:\Users\Home\Desktop\vsProjects\Center\bin\Debug\net7.0\Mono.TextTemplating.dll
 C:\Users\Home\Desktop\vsProjects\Center\bin\Debug\net7.0\MySqlConnector.dll
 C:\Users\Home\Desktop\vsProjects\Center\bin\Debug\net7.0\Pomelo.EntityFrameworkCore.MySql.dll
 C:\Users\Home\Desktop\vsProjects\Center\bin\Debug\net7.0\System.CodeDom.dll
+C:\Users\Home\Desktop\vsProjects\Center\bin\Debug\net7.0\BouncyCastle.Crypto.dll
+C:\Users\Home\Desktop\vsProjects\Center\bin\Debug\net7.0\itextsharp.dll
