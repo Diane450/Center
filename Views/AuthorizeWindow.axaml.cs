@@ -35,7 +35,7 @@ namespace Center.Views
                     ErrorLabel.Content = "Неправильный код";
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Label ErrorLabel = this.Find<Label>("ErrorLabel")!;
                 ErrorLabel.IsVisible = true;

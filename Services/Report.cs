@@ -13,21 +13,15 @@ using Avalonia.Platform.Storage;
 
 namespace Center.Services
 {
-    public class Report
+    public class Report(DateOnly[] range)
     {
         public Document PdfDoc { get; set; } = null!;
 
-        public DateOnly[] DateRange { get; set; }
+        public DateOnly[] DateRange { get; set; } = range;
 
         public List<IssuingMagazine> DispensingDrugList { get; set; } = null!;
 
         public List<ReceivingMagazine> ReceivingDrugList { get; set; } = null!;
-
-
-        public Report(DateOnly[] range)
-        {
-            DateRange = range;
-        }
 
         public void GetReportData()
         {
@@ -62,13 +56,13 @@ namespace Center.Services
             var result = await storageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
             {
                 Title = "Сохранить отчет как",
-                FileTypeChoices = new List<FilePickerFileType>
-                {
+                FileTypeChoices =
+                [
                     new FilePickerFileType("PDF")
                     {
-                        Patterns = new[] { "*.pdf" }
+                        Patterns = ["*.pdf"]
                     }
-                },
+                ],
                 DefaultExtension = "pdf"
             });
 
@@ -79,35 +73,33 @@ namespace Center.Services
 
                 try
                 {
-                    using (var fs = await result.OpenWriteAsync())
+                    using var fs = await result.OpenWriteAsync();
+                    PdfWriter.GetInstance(PdfDoc, fs);
+                    PdfDoc.Open();
+
+                    string fontPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "times.TTF");
+                    BaseFont fgBaseFont = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+                    Font fgFont = new(fgBaseFont, 14, Font.NORMAL, new BaseColor(0, 0, 0));
+
+                    var spacer = new Paragraph("")
                     {
-                        PdfWriter.GetInstance(PdfDoc, fs);
-                        PdfDoc.Open();
+                        SpacingAfter = 10f,
+                        SpacingBefore = 10f
+                    };
+                    PdfDoc.Add(spacer);
 
-                        string fontPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "times.TTF");
-                        BaseFont fgBaseFont = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-                        Font fgFont = new Font(fgBaseFont, 14, Font.NORMAL, new BaseColor(0, 0, 0));
+                    var title = new Paragraph($"ОТЧЕТ ПРОДАЖИ И ПРИЕМА ЖУРНАЛОВ \r ОТ {DateRange[0]} ДО {DateRange[1]}", new Font(fgBaseFont, 14, Font.BOLD, new BaseColor(0, 0, 0)))
+                    {
+                        SpacingAfter = 25f,
+                        Alignment = Element.ALIGN_CENTER
+                    };
+                    PdfDoc.Add(title);
 
-                        var spacer = new Paragraph("")
-                        {
-                            SpacingAfter = 10f,
-                            SpacingBefore = 10f
-                        };
-                        PdfDoc.Add(spacer);
+                    AddHeaderTable(fgFont);
+                    AddIssuingMagazinTable(fgFont);
+                    AddReceivingDrugTable(fgFont);
 
-                        var title = new Paragraph($"ОТЧЕТ ПРОДАЖИ И ПРИЕМА ЖУРНАЛОВ \r ОТ {DateRange[0]} ДО {DateRange[1]}", new Font(fgBaseFont, 14, Font.BOLD, new BaseColor(0, 0, 0)))
-                        {
-                            SpacingAfter = 25f,
-                            Alignment = Element.ALIGN_CENTER
-                        };
-                        PdfDoc.Add(title);
-
-                        AddHeaderTable(fgFont);
-                        AddIssuingMagazinTable(fgFont);
-                        AddReceivingDrugTable(fgFont);
-
-                        PdfDoc.Close();
-                    }
+                    PdfDoc.Close();
                 }
                 catch (Exception ex)
                 {
@@ -118,15 +110,17 @@ namespace Center.Services
 
         private void AddHeaderTable(Font fgFont)
         {
-            var headerTable = new PdfPTable(new[] { .75f })
+            var headerTable = new PdfPTable([.75f])
             {
                 HorizontalAlignment = 0,
                 WidthPercentage = 75,
                 DefaultCell = { MinimumHeight = 22f },
             };
 
-            PdfPCell cell = new PdfPCell(new Phrase($"Дата: {DateTime.Now.ToString("dd.MM.yyyy")}", fgFont));
-            cell.Border = Rectangle.NO_BORDER;
+            PdfPCell cell = new(new Phrase($"Дата: {DateTime.Now:dd.MM.yyyy}", fgFont))
+            {
+                Border = Rectangle.NO_BORDER
+            };
             headerTable.AddCell(cell);
 
             cell.Phrase = new Phrase($"Подготовил: {CurrentUser.Worker.FullName}", fgFont);
@@ -141,37 +135,37 @@ namespace Center.Services
             CreateTitle("Статистика проданных журналов за период");
             if (DispensingDrugList.Count > 0)
             {
-                var dispensingDrugsTable = new PdfPTable(new[] { 1.5f, .75f, .75f })
+                var dispensingDrugsTable = new PdfPTable([1.5f, .75f, .75f])
                 {
                     HorizontalAlignment = 0,
                     WidthPercentage = 100,
                     DefaultCell = { MinimumHeight = 22f },
                 };
-                PdfPCell title1 = new PdfPCell(new Phrase("Название", fgFont));
+                PdfPCell title1 = new(new Phrase("Название", fgFont));
                 dispensingDrugsTable.AddCell(title1);
 
-                PdfPCell title2 = new PdfPCell(new Phrase("Количество", fgFont));
+                PdfPCell title2 = new(new Phrase("Количество", fgFont));
                 dispensingDrugsTable.AddCell(title2);
 
-                PdfPCell title3 = new PdfPCell(new Phrase("Итоговая сумма", fgFont));
+                PdfPCell title3 = new(new Phrase("Итоговая сумма", fgFont));
                 dispensingDrugsTable.AddCell(title3);
 
 
                 foreach (var item in DispensingDrugList)
                 {
-                    PdfPCell cell = new PdfPCell(new Phrase(item.Magazin.Title, fgFont));
+                    PdfPCell cell = new(new Phrase(item.Magazin.Title, fgFont));
                     dispensingDrugsTable.AddCell(cell);
 
-                    PdfPCell cell2 = new PdfPCell(new Phrase(item.Count.ToString(), fgFont));
+                    PdfPCell cell2 = new(new Phrase(item.Count.ToString(), fgFont));
                     dispensingDrugsTable.AddCell(cell2);
 
-                    PdfPCell cell3 = new PdfPCell(new Phrase($"{item.TotalSum} ₽", fgFont));
+                    PdfPCell cell3 = new(new Phrase($"{item.TotalSum} ₽", fgFont));
                     dispensingDrugsTable.AddCell(cell3);
                 }
                 PdfDoc.Add(dispensingDrugsTable);
 
 
-                var headerTable = new PdfPTable(new[] { .75f })
+                var headerTable = new PdfPTable([.75f])
                 {
                     HorizontalAlignment = 0,
                     WidthPercentage = 75,
@@ -185,8 +179,10 @@ namespace Center.Services
                 };
                 PdfDoc.Add(spacer);
 
-                PdfPCell cell1 = new PdfPCell(new Phrase($"Итого за период: {DispensingDrugList.Sum(x => x.TotalSum)} ₽", fgFont));
-                cell1.Border = Rectangle.NO_BORDER;
+                PdfPCell cell1 = new(new Phrase($"Итого за период: {DispensingDrugList.Sum(x => x.TotalSum)} ₽", fgFont))
+                {
+                    Border = Rectangle.NO_BORDER
+                };
                 headerTable.AddCell(cell1);
 
                 PdfDoc.Add(headerTable);
@@ -207,25 +203,25 @@ namespace Center.Services
             CreateTitle("Статистика полученных журналов за период");
             if (ReceivingDrugList.Count > 0)
             {
-                var receivingMagazinTable = new PdfPTable(new[] { 1f, .75f })
+                var receivingMagazinTable = new PdfPTable([1f, .75f])
                 {
                     HorizontalAlignment = 0,
                     WidthPercentage = 100,
                     DefaultCell = { MinimumHeight = 22f },
                 };
 
-                PdfPCell title1 = new PdfPCell(new Phrase("Название", fgFont));
+                PdfPCell title1 = new(new Phrase("Название", fgFont));
                 receivingMagazinTable.AddCell(title1);
 
-                PdfPCell title2 = new PdfPCell(new Phrase("Количество", fgFont));
+                PdfPCell title2 = new(new Phrase("Количество", fgFont));
                 receivingMagazinTable.AddCell(title2);
 
                 foreach (var item in ReceivingDrugList)
                 {
-                    PdfPCell cell = new PdfPCell(new Phrase(item.Magazin.Title, fgFont));
+                    PdfPCell cell = new(new Phrase(item.Magazin.Title, fgFont));
                     receivingMagazinTable.AddCell(cell);
 
-                    PdfPCell cell2 = new PdfPCell(new Phrase(item.Count.ToString(), fgFont));
+                    PdfPCell cell2 = new(new Phrase(item.Count.ToString(), fgFont));
                     receivingMagazinTable.AddCell(cell2);
                 }
                 PdfDoc.Add(receivingMagazinTable);
