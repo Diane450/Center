@@ -42,12 +42,12 @@ namespace Center.ViewModels
             set { _message = this.RaiseAndSetIfChanged(ref _message, value); }
         }
 
-        private ReportWindow _reportWindow;
+        private ReportWindow _reportWindow = null!;
 
         public ReportWindow ReportWindow
         {
             get { return _reportWindow; }
-            set { _reportWindow = this.RaiseAndSetIfChanged(ref _reportWindow, value);; }
+            set { _reportWindow = this.RaiseAndSetIfChanged(ref _reportWindow, value); ; }
         }
 
         public ReportWindowViewModel(ReportWindow window)
@@ -59,16 +59,16 @@ namespace Center.ViewModels
         {
             try
             {
-                DateTime DateStart = (DateTime)SelectedDateStart;
-                DateTime DateEnd = (DateTime)SelectedDateEnd;
+                DateTime DateStart = (DateTime)SelectedDateStart!;
+                DateTime DateEnd = (DateTime)SelectedDateEnd!;
 
-                DateOnly[] range = new DateOnly[]
-                {
+                DateOnly[] range =
+                [
                     new DateOnly (DateStart.Year, DateStart.Month, DateStart.Day),
                     new DateOnly (DateEnd.Year, DateEnd.Month, DateEnd.Day)
-                };
+                ];
                 Array.Sort(range);
-                Report report = new Report(range);
+                Report report = new(range);
                 report.GetReportData();
                 await report.CreateReport(ReportWindow);
             }

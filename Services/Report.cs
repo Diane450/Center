@@ -9,6 +9,7 @@ using Center.ModelsDTO;
 using Avalonia.Controls;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Platform.Storage;
 
 namespace Center.Services
 {
@@ -35,7 +36,7 @@ namespace Center.Services
                 DispensingDrugList = DBCall.GetIssuingMagazinData(DateRange);
                 ReceivingDrugList = DBCall.GetReceivingMagazinData(DateRange);
             }
-            catch (Exception ex)
+            catch
             {
                 throw new Exception();
             }
@@ -57,16 +58,20 @@ namespace Center.Services
 
         public async Task CreateReport(ReportWindow window)
         {
-            var saveFileDialog = new SaveFileDialog
+            var storageProvider = window.StorageProvider;
+            var result = await storageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
             {
                 Title = "Сохранить отчет как",
-                Filters = new List<FileDialogFilter>
+                FileTypeChoices = new List<FilePickerFileType>
                 {
-                    new FileDialogFilter { Name = "PDF", Extensions = { "pdf" } }
-                }
-            };
-            var result = await saveFileDialog.ShowAsync(window);
-            
+                    new FilePickerFileType("PDF")
+                    {
+                        Patterns = new[] { "*.pdf" }
+                    }
+                },
+                DefaultExtension = "pdf"
+            });
+
             if (result != null)
             {
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -74,7 +79,7 @@ namespace Center.Services
 
                 try
                 {
-                    using (var fs = new FileStream(result, FileMode.Create, FileAccess.Write, FileShare.None))
+                    using (var fs = await result.OpenWriteAsync())
                     {
                         PdfWriter.GetInstance(PdfDoc, fs);
                         PdfDoc.Open();
