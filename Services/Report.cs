@@ -4,14 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Drawing.Printing;
-using Avalonia.Dialogs;
-using System.Diagnostics;
 using Center.Models;
-using Center.Services;
 using Center.ModelsDTO;
-using static iTextSharp.text.pdf.AcroFields;
+using Avalonia.Controls;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Center.Services
 {
@@ -58,39 +55,60 @@ namespace Center.Services
             PdfDoc.Add(title);
         }
 
-        public void CreateReport()
+        public async Task CreateReport(ReportWindow window)
         {
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            PdfDoc = new Document(PageSize.A4, 40f, 40f, 60f, 60f);
-            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            PdfWriter.GetInstance(PdfDoc, new FileStream(desktopPath + $"\\Отчет {DateTime.Now:yyyy-MM-dd_HH-mm-ss}.pdf", FileMode.Create));
-            PdfDoc.Open();
-
-            string fontPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "times.TTF");
-            BaseFont fgBaseFont = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            Font fgFont = new Font(fgBaseFont, 14, Font.NORMAL, new BaseColor(0, 0, 0));
-
-            var spacer = new Paragraph("")
+            var saveFileDialog = new SaveFileDialog
             {
-                SpacingAfter = 10f,
-                SpacingBefore = 10f
+                Title = "Сохранить отчет как",
+                Filters = new List<FileDialogFilter>
+                {
+                    new FileDialogFilter { Name = "PDF", Extensions = { "pdf" } }
+                }
             };
-            PdfDoc.Add(spacer);
-
-            var title = new Paragraph($"ОТЧЕТ ПРОДАЖИ И ПРИЕМА ЖУРНАЛОВ \r ОТ {DateRange[0]} ДО {DateRange[1]}", new Font(fgBaseFont, 14, Font.BOLD, new BaseColor(0, 0, 0)))
+            var result = await saveFileDialog.ShowAsync(window);
+            
+            if (result != null)
             {
-                SpacingAfter = 25f,
-                Alignment = Element.ALIGN_CENTER
-            };
-            PdfDoc.Add(title);
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                PdfDoc = new Document(PageSize.A4, 40f, 40f, 60f, 60f);
 
-            AddHeaderTable(fgFont);
+                try
+                {
+                    using (var fs = new FileStream(result, FileMode.Create, FileAccess.Write, FileShare.None))
+                    {
+                        PdfWriter.GetInstance(PdfDoc, fs);
+                        PdfDoc.Open();
 
-            AddIssuingMagazinTable(fgFont);
+                        string fontPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "times.TTF");
+                        BaseFont fgBaseFont = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+                        Font fgFont = new Font(fgBaseFont, 14, Font.NORMAL, new BaseColor(0, 0, 0));
 
-            AddReceivingDrugTable(fgFont);
+                        var spacer = new Paragraph("")
+                        {
+                            SpacingAfter = 10f,
+                            SpacingBefore = 10f
+                        };
+                        PdfDoc.Add(spacer);
 
-            PdfDoc.Close();
+                        var title = new Paragraph($"ОТЧЕТ ПРОДАЖИ И ПРИЕМА ЖУРНАЛОВ \r ОТ {DateRange[0]} ДО {DateRange[1]}", new Font(fgBaseFont, 14, Font.BOLD, new BaseColor(0, 0, 0)))
+                        {
+                            SpacingAfter = 25f,
+                            Alignment = Element.ALIGN_CENTER
+                        };
+                        PdfDoc.Add(title);
+
+                        AddHeaderTable(fgFont);
+                        AddIssuingMagazinTable(fgFont);
+                        AddReceivingDrugTable(fgFont);
+
+                        PdfDoc.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error creating PDF report", ex);
+                }
+            }
         }
 
         private void AddHeaderTable(Font fgFont)
@@ -182,7 +200,7 @@ namespace Center.Services
         private void AddReceivingDrugTable(Font fgFont)
         {
             CreateTitle("Статистика полученных журналов за период");
-            if (ReceivingDrugList.Count>0)
+            if (ReceivingDrugList.Count > 0)
             {
                 var receivingMagazinTable = new PdfPTable(new[] { 1f, .75f })
                 {

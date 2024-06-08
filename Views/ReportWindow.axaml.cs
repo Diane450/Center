@@ -10,6 +10,6 @@ public partial class ReportWindow : Window
     public ReportWindow()
     {
         InitializeComponent();
-        DataContext = new ReportWindowViewModel();
+        DataContext = new ReportWindowViewModel(this);
     }
 }

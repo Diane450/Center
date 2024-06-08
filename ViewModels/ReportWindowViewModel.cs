@@ -1,10 +1,10 @@
 ﻿using Center.Services;
 using ReactiveUI;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Avalonia.Controls;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+
 
 namespace Center.ViewModels
 {
@@ -42,17 +42,20 @@ namespace Center.ViewModels
             set { _message = this.RaiseAndSetIfChanged(ref _message, value); }
         }
 
-        public ReportWindowViewModel()
-        {
+        private ReportWindow _reportWindow;
 
+        public ReportWindow ReportWindow
+        {
+            get { return _reportWindow; }
+            set { _reportWindow = this.RaiseAndSetIfChanged(ref _reportWindow, value);; }
         }
 
-        public void test()
+        public ReportWindowViewModel(ReportWindow window)
         {
-
+            ReportWindow = window;
         }
 
-        public void CreateReport()
+        public async Task CreateReport()
         {
             try
             {
@@ -67,8 +70,7 @@ namespace Center.ViewModels
                 Array.Sort(range);
                 Report report = new Report(range);
                 report.GetReportData();
-                report.CreateReport();
-                Message = "Отчет готов";
+                await report.CreateReport(ReportWindow);
             }
             catch
             {
