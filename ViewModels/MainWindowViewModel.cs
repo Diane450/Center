@@ -86,26 +86,26 @@ namespace Center.ViewModels
             Magazins = DBCall.GetMagazines();
             FilteredMagazin = new ObservableCollection<MagazinDTO>(Magazins);
             MagazinDTO.IsAdmin = CurrentUser.Worker.User.RoleId == 1;
-            SortValues = new List<string>
-            {
+            SortValues =
+            [
                 "от А до Я",
                 "от Я до А",
                 "количество: от меньшего к большему",
                 "количество: от большего к меньшему",
                 "дата: от раннего к позднему",
                 "дата: от позднего к раннему",
-            };
+            ];
             SelectedSortValue = SortValues[0];
 
-            Creators = new List<Worker>
-            {
+            Creators =
+            [
                 new Worker
                 {
                     Id=0,
                     FullName="Все"
-                }
-            };
-            Creators.AddRange(DBCall.GetCreators());
+                },
+                .. DBCall.GetCreators(),
+            ];
             SelectedCreator = Creators[0];
             this.WhenAnyValue(x => x.SearchingMagazin).Subscribe(_ => Find());
             IsAdmin = CurrentUser.Worker.User.RoleId == 1;
@@ -115,7 +115,7 @@ namespace Center.ViewModels
         {
             if (!string.IsNullOrEmpty(SearchingMagazin))
             {
-                FilteredMagazin = new ObservableCollection<MagazinDTO>(Magazins.Where(d => d.Title.ToLower().StartsWith(SearchingMagazin.ToLower())).ToList());
+                FilteredMagazin = new ObservableCollection<MagazinDTO>(Magazins.Where(d => d.Title.Contains(SearchingMagazin, StringComparison.OrdinalIgnoreCase)).ToList());
                 if (FilteredMagazin.Count == 0 || FilteredMagazin == null)
                 {
                     IsFilteredListNotNull = false;
@@ -138,27 +138,27 @@ namespace Center.ViewModels
         {
             if (SelectedSortValue == SortValues[0])
             {
-                FilteredMagazin = new ObservableCollection<MagazinDTO>(FilteredMagazin.OrderBy(d => d.Title).ToList());
+                FilteredMagazin = new ObservableCollection<MagazinDTO>([.. FilteredMagazin.OrderBy(d => d.Title)]);
             }
             else if (SelectedSortValue == SortValues[1])
             {
-                FilteredMagazin = new ObservableCollection<MagazinDTO>(FilteredMagazin.OrderByDescending(d => d.Title).ToList());
+                FilteredMagazin = new ObservableCollection<MagazinDTO>([.. FilteredMagazin.OrderByDescending(d => d.Title)]);
             }
             else if (SelectedSortValue == SortValues[2])
             {
-                FilteredMagazin = new ObservableCollection<MagazinDTO>(FilteredMagazin.OrderBy(d => d.Count).ToList());
+                FilteredMagazin = new ObservableCollection<MagazinDTO>([.. FilteredMagazin.OrderBy(d => d.Count)]);
             }
             else if (SelectedSortValue == SortValues[3])
             {
-                FilteredMagazin = new ObservableCollection<MagazinDTO>(FilteredMagazin.OrderByDescending(d => d.Count).ToList());
+                FilteredMagazin = new ObservableCollection<MagazinDTO>([.. FilteredMagazin.OrderByDescending(d => d.Count)]);
             }
             else if (SelectedSortValue == SortValues[4])
             {
-                FilteredMagazin = new ObservableCollection<MagazinDTO>(FilteredMagazin.OrderBy(d => d.CreationDate).ToList());
+                FilteredMagazin = new ObservableCollection<MagazinDTO>([.. FilteredMagazin.OrderBy(d => d.CreationDate)]);
             }
             else
             {
-                FilteredMagazin = new ObservableCollection<MagazinDTO>(FilteredMagazin.OrderByDescending(d => d.CreationDate).ToList());
+                FilteredMagazin = new ObservableCollection<MagazinDTO>([.. FilteredMagazin.OrderByDescending(d => d.CreationDate)]);
             }
             SelectedMagazin = FilteredMagazin[0];
         }

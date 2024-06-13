@@ -70,7 +70,7 @@ namespace Center.ViewModels
                 Array.Sort(range);
                 Report report = new(range);
                 report.GetReportData();
-                await report.CreateReport(ReportWindow);
+                Message = await report.CreateReport(ReportWindow);
             }
             catch
             {

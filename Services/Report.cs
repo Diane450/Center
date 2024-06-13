@@ -50,7 +50,7 @@ namespace Center.Services
             PdfDoc.Add(title);
         }
 
-        public async Task CreateReport(ReportWindow window)
+        public async Task<string> CreateReport(ReportWindow window)
         {
             var storageProvider = window.StorageProvider;
             var result = await storageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
@@ -100,12 +100,14 @@ namespace Center.Services
                     AddReceivingDrugTable(fgFont);
 
                     PdfDoc.Close();
+                    return "Отчет создан";
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("Error creating PDF report", ex);
+                    throw;
                 }
             }
+            return "";
         }
 
         private void AddHeaderTable(Font fgFont)

@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace Center.ViewModels
 {
-    public class DeleteWindowViewModel : ViewModelBase
+    public class DeleteWindowViewModel(MainWindowViewModel model, MagazinDTO magazin) : ViewModelBase
     {
-        public MainWindowViewModel Model { get; set; }
+        public MainWindowViewModel Model { get; set; } = model;
 
-        public MagazinDTO Magazin { get; set; }
+        public MagazinDTO Magazin { get; set; } = magazin;
 
 
         private string _message = null!;
@@ -33,11 +33,6 @@ namespace Center.ViewModels
             set { _isButtonEnable = this.RaiseAndSetIfChanged(ref _isButtonEnable, value); }
         }
 
-        public DeleteWindowViewModel(MainWindowViewModel model, MagazinDTO magazin)
-        {
-            Model = model;
-            Magazin = magazin;
-        }
         public void Delete()
         {
             try

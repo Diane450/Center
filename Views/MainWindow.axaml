@@ -73,6 +73,6 @@
 			</ItemsControl>
 		</ScrollViewer>
 
-		<TextBlock Text="{Binding Message}" FontSize="24" Margin="20" Grid.ColumnSpan="2" Foreground="White" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="2"/>
+		<TextBlock Text="{Binding Message}" FontSize="24" Margin="20" Grid.ColumnSpan="2" Foreground="White" FontWeight="Bold" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1"/>
 	</Grid>
 </Window>
